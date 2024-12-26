@@ -1,0 +1,103 @@
+import pygame
+import random
+
+# Initialize Pygame
+pygame.init()
+
+# Screen dimensions
+width, height = 800, 600
+screen = pygame.display.set_mode((width, height))
+pygame.display.set_caption("Racing Game")
+
+# Colors
+white = (255, 255, 255)
+red = (255, 0, 0)
+
+# Car image
+car_img = pygame.image.load('car.png')
+car_x = width // 2 - car_img.get_width() // 2
+car_y = height - car_img.get_height() - 10
+
+# Opponent car
+opponent_car_img = pygame.image.load('opponent_car.png')
+opponent_car_x = random.randint(0, width - opponent_car_img.get_width())
+opponent_car_y = -opponent_car_img.get_height()
+opponent_car_speed = 5
+
+# Game loop
+running = True
+while running:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    # Handle player input
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT] and car_x > 0:
+        car_x -= 5
+    if keys[pygame.K_RIGHT] and car_x < width - car_img.get_width():
+        car_x += 5
+
+    # Move opponent car
+    opponent_car_y += opponent_car_speed
+
+    # Check for collision
+    if (
+        car_x >= opponent_car_x
+        and car_x <= opponent_car_x + opponent_car_img.get_width()
+        and car_y >= opponent_car_y
+        and car_y <= opponent_car_y + opponent_car_img.get_height()
+    ):
+        print("Collision!")
+        running = False
+
+    # Reset opponent car position
+    if opponent_car_y > height:
+        opponent_car_x = random.randint(0, width - opponent_car_img.get_width())
+        opponent_car_y = -opponent_car_img.get_height()
+
+    # Draw background
+    screen.fill(white)
+
+    # Draw cars
+    screen.blit(car_img, (car_x, car_y))
+    screen.blit(opponent_car_img, (opponent_car_x, opponent_car_y))
+
+    # Update display
+    pygame.display.update()
+
+# Quit Pygame
+pygame.quit()
+
+Explanation:
+ * Initialization:
+   * Import necessary modules (pygame, random).
+   * Initialize Pygame and create the game window.
+   * Define colors.
+   * Load car images.
+   * Set initial positions for the player and opponent cars.
+ * Game Loop:
+   * The while running loop continues until the game is exited.
+   * Handle player input (left and right arrow keys).
+   * Move the opponent car downwards.
+   * Check for collision between the player and opponent cars.
+   * Reset the opponent car's position if it goes off the screen.
+   * Draw the background and cars on the screen.
+   * Update the display.
+ * Quitting the Game:
+   * When the game is over or the player quits, the pygame.quit() function is called to exit Pygame.
+To run this code:
+ * Save: Save the code as a Python file (e.g., racing_game.py).
+ * Install Pygame: If you haven't already, install Pygame using pip install pygame.
+ * Run: Execute the script from your terminal using python racing_game.py.
+To improve this code:
+ * Add more cars: Create multiple opponent cars with varying speeds.
+ * Implement scoring: Track the player's score based on how long they survive.
+ * Create a track: Draw a road or track on the screen.
+ * Add obstacles: Introduce obstacles like trees or barriers.
+ * Improve graphics: Use better-looking car images and background graphics.
+ * Sound effects: Add sound effects for collisions, scoring, and other game events.
+This basic example provides a foundation for building a more complex and engaging racing game. You can experiment with different game mechanics, graphics, and sound effects to create your own unique racing experience.
+ * https://github.com/Laurens-Rams/MiniProject-HW2
+ * https://thewitchofendor.com/author/hackerm0m/
+ * https://github.com/DrKstripes007/hellopython
